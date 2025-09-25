@@ -1,6 +1,7 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, version } = require("mongoose");
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { useState } = require("react");
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -36,5 +37,22 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         }
+    },
+    {
+        timestamps: true
     }
 )
+
+userSchema.methods.comparePassword = function (plain) {
+    return bcrypt.compare(plain, this.passwordHash)
+}
+
+userSchema.methods.toSafeJSON = function () {
+    const obj = this.toObject({ versionKey: false })
+    delete obj.passwordHash
+    return obj
+}
+
+userSchema.index({ email: 1 }, { unique: true })
+
+module.exports = mongoose.model('User', userSchema)
