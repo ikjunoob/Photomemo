@@ -1,7 +1,6 @@
 const { default: mongoose, version } = require("mongoose");
 
 const bcrypt = require('bcrypt');
-const { useState } = require("react");
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -20,7 +19,7 @@ const userSchema = new mongoose.Schema(
         },
         displayName: {
             type: String,
-            trin: true,
+            trim: true,
             default: ""
         },
         role: {

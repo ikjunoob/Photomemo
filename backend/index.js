@@ -5,6 +5,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const cookieParser = require('cookie-parser');
 
+const authRoutes = require("./routes/authRoutes"); // authRoutes 불러오기
+
 // .env 파일의 환경 변수를 로드합니다.
 dotenv.config();
 
@@ -26,15 +28,21 @@ app.use(express.json({ limit: "2mb" }));
 // 쿠키 파싱 미들웨어: 요청된 쿠키를 파싱하여 req.cookies에서 사용할 수 있게 합니다.
 app.use(cookieParser());
 
+// --- 라우팅 ---
+
+// '/api/auth'로 시작하는 모든 요청은 authRoutes 파일에서 처리합니다.
+// 이 코드는 반드시 json, cors, cookie-parser 미들웨어 뒤에 와야 합니다.
+app.use("/api/auth", authRoutes);
+
+// 루트 경로('/') GET 요청: 서버 상태 확인용 (Health Check)
+app.get("/", (_req, res) => res.send("PhotoMemo API OK"));
+
+
 // --- MongoDB 연결 ---
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB 연결 성공"))
     .catch((err) => console.error("MongoDB 연결 실패:", err.message));
 
-// --- 라우팅 ---
-
-// 루트 경로('/') GET 요청: 서버 상태 확인용 (Health Check)
-app.get("/", (_req, res) => res.send("PhotoMemo API OK"));
 
 // --- 오류 처리 미들웨어 ---
 
@@ -42,6 +50,7 @@ app.get("/", (_req, res) => res.send("PhotoMemo API OK"));
 app.use((_req, res) => {
     res.status(500).json({ message: "서버 오류" });
 });
+
 
 // --- 서버 실행 ---
 
