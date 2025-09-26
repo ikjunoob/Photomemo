@@ -35,6 +35,11 @@ const userSchema = new mongoose.Schema(
         isLoggined: {
             type: Boolean,
             default: false
+        },
+        // 추가
+        loginAttempts: {
+            type: Number,
+            default: 0
         }
     },
     {
