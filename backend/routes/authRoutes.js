@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
 
         //비밀번호 비교 (User 모델에 comparePassword 메서드가 있다고 가정)
         const pw_ok = await user.comparePassword(password)
-        if (!pw_ok) return res.status(400).json(invalidMsg2)
+        // if (!pw_ok) return res.status(400).json(invalidMsg2)
 
         // 이메일과 비밀번호가 틀렸을 때 loginAttempts를 하나씩 올려주는 조건문 넣기 응답 보내기
         // 비밀번호가 틀렸을 경우 (로그인 실패)
@@ -80,10 +80,10 @@ router.post('/login', async (req, res) => {
             const MAX_LOGIN_ATTEMPTS = 1000; // 최대 로그인 시도 횟수
             user.loginAttempts += 1;     // 시도 횟수 1 증가
 
-            // 시도 횟수가 최대치를 넘으면 계정을 비활성화(잠금)합니다.
+            // 시도 횟수가 최대치를 넘으면 계정을 비활성화(잠금)
             if (user.loginAttempts >= MAX_LOGIN_ATTEMPTS) {
                 user.isActive = false;
-                await user.save(); // 변경된 내용을 DB에 저장합니다.
+                await user.save(); // 변경된 내용을 DB에 저장
                 return res.status(403).json({ message: `로그인 시도 횟수(${MAX_LOGIN_ATTEMPTS}회)를 초과하여 계정이 비활성화되었습니다.` });
             }
 
