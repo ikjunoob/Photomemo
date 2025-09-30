@@ -157,7 +157,7 @@ router.use(auth)
 
 router.get("/me", async (req, res) => {
     try {
-        const me = await User.findById(req.user._id)
+        const me = await User.findById(req.user.id)
         if (!me) return res.status(404).json({ message: '사용자 없음' })
 
         return res.status(200).json(me.toSafeJSON())
@@ -165,6 +165,38 @@ router.get("/me", async (req, res) => {
     } catch (error) {
 
         res.status(401).json({ message: "조회 실패", error: error.message })
+
+    }
+})
+
+router.get('/users', async (req, res) => {
+    try {
+        const me = await User.findById(req.user.id)
+
+        if (!me) return res.status(404).json({ message: '사용자 없음' })
+
+        if (me.role !== 'admin') {
+            return res.status(403).json({ message: '권한 없음' })
+        }
+
+        const users = await User.find().select('-passwordHash')
+    } catch (error) {
+
+    }
+})
+
+router.get('/logout', async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(
+            req.user.id,
+            { $set: { isLoggined: false }, },
+            { new: true }
+        )
+
+        res.clearCookie('token',{
+            httpOnly
+        })
+    } catch (error) {
 
     }
 })
