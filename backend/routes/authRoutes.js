@@ -59,7 +59,7 @@ router.post("/register", async (req, res) => {
     }
 })
 
-const LOCK_MAX = 10
+const LOCK_MAX = 5
 router.post("/login", async (req, res) => {
     try {
         // 1) req.body에서 email, password를 꺼낸다(기본값은 빈 문자열).
@@ -117,6 +117,7 @@ router.post("/login", async (req, res) => {
             })
         }
 
+
         // 6 로그인 성공: 실패 카운트 초기화 접속 정보 업데이트
 
         user.loginAttempts = 0
@@ -127,6 +128,7 @@ router.post("/login", async (req, res) => {
 
         // 7 JWT 발급 및 쿠키 설정
         const token = makeToken(user)
+
 
         res.cookie('token', token, {
             httpOnly: true,
@@ -155,37 +157,40 @@ router.post("/login", async (req, res) => {
 
 router.use(auth)
 
+
 router.get("/me", async (req, res) => {
     try {
         const me = await User.findById(req.user.id)
-        if (!me) return res.status(404).json({ message: '사용자 없음' })
+
+        if (!me) return res.status(404).json({ message: "사용자 없음" })
 
         return res.status(200).json(me.toSafeJSON())
 
     } catch (error) {
 
         res.status(401).json({ message: "조회 실패", error: error.message })
-
     }
 })
 
-router.get('/users', async (req, res) => {
+router.get("/users", async (req, res) => {
     try {
         const me = await User.findById(req.user.id)
-
         if (!me) return res.status(404).json({ message: '사용자 없음' })
+
 
         if (me.role !== 'admin') {
             return res.status(403).json({ message: '권한 없음' })
         }
-
         const users = await User.find().select('-passwordHash')
+
+        return res.status(200).json({ users })
     } catch (error) {
+        res.status(401).json({ message: "조회 실패", error: error.message })
 
     }
 })
 
-router.get('/logout', async (req, res) => {
+router.post("/logout", async (req, res) => {
     try {
         await User.findByIdAndUpdate(
             req.user.id,
@@ -193,11 +198,15 @@ router.get('/logout', async (req, res) => {
             { new: true }
         )
 
-        res.clearCookie('token',{
-            httpOnly
+        res.clearCookie('token', {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: "production",
         })
+        return res.status(200).json({ message: '로그아웃 성공' })
     } catch (error) {
 
+        return res.status(500).json({ message: '로그아웃 실패', error: error.message })
     }
 })
 
