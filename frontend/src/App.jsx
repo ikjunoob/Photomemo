@@ -33,6 +33,17 @@ function App() {
     localStorage.removeItem('token')
   }
 
+  const fetchMe = async () => {
+    try {
+      const { data } = await api.get('/api/auth/me')
+      setMe(data)
+
+    } catch (error) {
+      setMe({ error: error.response?.data || '실패' })
+    }
+  }
+
+
 
   return (
     <div className='page'>
