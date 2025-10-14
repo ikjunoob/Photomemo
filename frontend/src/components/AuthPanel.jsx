@@ -10,15 +10,15 @@ const AuthPanel = () => {
                     버튼 → 모달에서 로그인/회원가입 → 토큰 저장 → /me 호출
                 </p>
             </header>
-            {/* 로그인 전 */}
             <div className="auth-row">
+            {/* 로그인 전 */}
                 <button className="btn btn-primary">
                     로그인 / 회원가입
                 </button>
 
             </div>
-            {/* 로그인 후 */}
             <div className="auth-row">
+            {/* 로그인 후 */}
                 <span>안녕하세요 <b>사용자 명 또는 이메일</b> </span>
                 <span className="badge badge-ok">admin</span>
 
