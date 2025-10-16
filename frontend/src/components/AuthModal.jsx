@@ -32,7 +32,7 @@ const AuthModal = ({
                         placeholder='비밀번호'
                         required
                     />
-                    {/* 에러 메세지 출력 */}
+
                     <div className="am-msg warn">
                         유효성 검증 실패로 로그인이 차단되었습니다. 관리자에게 문의하세요
                     </div>
