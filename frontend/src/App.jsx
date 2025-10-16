@@ -1,10 +1,10 @@
+
 import './App.scss'
 import { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import AuthPanel from './components/AuthPanel'
 import Landing from './pages/Landing'
 import api from "./api/client"
-
 function App() {
 
   const [user, setUser] = useState(() => {
@@ -16,8 +16,9 @@ function App() {
   const [me, setMe] = useState(null)
   const isAuthed = !!token
 
+
   const handleAuthed = ({ user, token }) => {
-    serUser(user)
+    setUser(user)
     setToken(token)
 
     localStorage.setItem('user', JSON.stringify(user))
@@ -44,14 +45,24 @@ function App() {
   }
 
 
-
   return (
     <div className='page'>
       <Routes>
         <Route path='/' element={<Landing />} />
-        <Route path='/admin/login' element={<AuthPanel />} />
+        <Route
+          path='/admin/login'
+          element={<AuthPanel
+            isAuthed={isAuthed}
+            user={user}
+            me={me}
+            onFetchMe={fetchMe}
+            onLogout={logout}
+            onAuthed={handleAuthed}
+            requiredRole="admin"
+          />}
+        />
+        <Route path='*' element={<Navigate to="/" replace />} />
       </Routes>
-
     </div>
   )
 }
