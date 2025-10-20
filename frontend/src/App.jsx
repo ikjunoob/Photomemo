@@ -21,9 +21,15 @@ function App() {
     return raw ? JSON.parse(raw) : null
   })
 
+
+
   const [token, setToken] = useState(() => localStorage.getItem('token'))
   const [me, setMe] = useState(null)
   const isAuthed = !!token
+
+
+  const hideOn = new Set(['/', '/admin/login'])
+  const showHeader = isAuthed && !hideOn.has(location.pathname)
 
 
   const handleAuthed = async ({ user, token }) => {
@@ -70,6 +76,12 @@ function App() {
 
   return (
     <div className='page'>
+      {showHeader && <Header
+        isAuthed={isAuthed}
+        user={user}
+        onLogout={handleLogout}
+      />}
+
       <Routes>
         <Route path='/' element={<Landing />} />
         {/* 로그인 회원가입 */}
