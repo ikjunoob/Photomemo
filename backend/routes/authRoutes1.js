@@ -164,7 +164,7 @@ router.post('/login', async (req, res) => {
 router.get('/me', async (req, res) => {
     try {
         const h = req.headers.authorization || ''
-
+        
         const token = h.startsWith('Bearer') ? h.slice(7) : null
 
         if (!token) return res.status(401).json({ message: '인증 필요' })
