@@ -7,7 +7,7 @@ import Landing from './pages/Landing'
 import Header from './components/Header'
 import ProtectRoute from './components/ProtectRoute'
 import UserDashboard from './pages/user/userDashboard'
-import AdminDashboard from './pages/admin/adminDashboard'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import {
   fetchMe as apiFetchMe,
   logout as apiLogout,
