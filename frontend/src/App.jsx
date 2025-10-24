@@ -6,7 +6,7 @@ import AuthPanel from './components/AuthPanel'
 import Landing from './pages/Landing'
 import Header from './components/Header'
 import ProtectRoute from './components/ProtectRoute'
-import UserDashboard from './pages/user/userDashboard'
+import UserDashboard from './pages/user/UserDashboard'
 import AdminDashboard from './pages/admin/adminDashboard'
 import {
   fetchMe as apiFetchMe,
@@ -104,7 +104,7 @@ function App() {
             <ProtectRoute
               user={user}
               isAuthed={isAuthed}
-              redirect='/admin/login'
+              redirect='/'
             />
           }
         >
