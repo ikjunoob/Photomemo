@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.get("/", (_req, res) => res.send("PhotoMemo API OK"));
 
 // authRoutes
-const authRoutes = require("./routes/authroutes")
+const authRoutes = require("./routes/authRoutes")
 const uploadRoutes = require('./routes/upload')
 const postRoutes = require('./routes/posts')
 
