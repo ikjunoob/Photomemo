@@ -3,7 +3,8 @@ const router = express.Router()
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const User = require("../models/User")
-const auth = require('../middlewares/auth')
+const { authenticateToken } = require('../middlewares/auth'); // ✅ 변경됨: auth → authenticateToken 명시적 미들웨어 사용
+
 
 function makeToken(user) {
     return jwt.sign(
@@ -14,7 +15,8 @@ function makeToken(user) {
         },
         process.env.JWT_SECRET,
         {
-            expiresIn: "7d"
+            expiresIn: "7d",
+            jwtid: `${user._id}-${Date.now()}`,
         }
 
     )
@@ -133,7 +135,8 @@ router.post("/login", async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,
             sameSite: "lax",
-            secure: "production",
+            secure: process.env.NODE_ENV === "production",
+            path: "/",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
@@ -155,7 +158,7 @@ router.post("/login", async (req, res) => {
     }
 })
 
-router.use(auth)
+router.use(authenticateToken)
 
 
 router.get("/me", async (req, res) => {
@@ -201,7 +204,8 @@ router.post("/logout", async (req, res) => {
         res.clearCookie('token', {
             httpOnly: true,
             sameSite: "lax",
-            secure: "production",
+            secure: process.env.NODE_ENV === "production",
+            path: '/'
         })
         return res.status(200).json({ message: '로그아웃 성공' })
     } catch (error) {
