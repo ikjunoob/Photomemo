@@ -14,6 +14,11 @@
         border-color: var(--primary);
     }
 
+    &.secondary {
+        background: var(--secondary);
+        color: var(--secondary-contrast);
+    }
+
     &.ghost {
         background: var(--border);
         color: var(--text);
@@ -22,5 +27,6 @@
 
     &.danger {
         background-color: var(--danger);
+        color: var(--danger-contrast);
     }
 }

@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import FileList from './FileList'
-import UploadForm from './UploadForm'
-import "./style/UserDashboard.scss"
+import React, { useState } from "react";
+
+import UploadForm from "./UploadForm";
+import "./style/UserDashboard.scss";
+
+import UserPostList from "./UserPostList";
 const UserDashboard = () => {
-    const [search, setSearch] = useState("")
-    const [open, setOpen] = useState(false)
+    const [search, setSearch] = useState("");
+    const [open, setOpen] = useState(false);
+
     return (
         <section>
             <div className="inner">
@@ -13,23 +16,19 @@ const UserDashboard = () => {
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder='검색어를 입력해주세요' />
-                    <button
-                        className='btn primary'
-                        onClick={() => setOpen(true)}
-                    >업로드
+                        placeholder="검색어를 입력해주세요"
+                    />
+                    <button className="btn primary" onClick={() => setOpen(true)}>
+                        업로드
                     </button>
                 </div>
             </div>
-            <div className="inner">
-                {open && (
-
-                    <UploadForm open={open} onClose={() => setOpen(false)} />
-                )}
-                <FileList />
+            <div>
+                {open && <UploadForm onClose={() => setOpen(false)} />}
+                <UserPostList search={search} />
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default UserDashboard
+export default UserDashboard;
