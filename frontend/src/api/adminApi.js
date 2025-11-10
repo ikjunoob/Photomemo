@@ -10,12 +10,9 @@ export const fetchAdminStats = async () => {
 
 
 /** 게시글 목록 (필터/페이지) */
-export const fetchAdminPosts = async (params = {}) => {
-    const { page = 1, size = 20, status, q } = params;
-    const { data } = await api.get("/api/admin/posts", {
-        params: { page, size, status, q },
-    });
-    return Array.isArray(data) ? data : [];
+export const fetchAdminPosts = async () => {
+    const { data } = await api.get("/api/admin/posts"); // 파라미터 없음
+    return Array.isArray(data) ? data : data.items ?? [];
 };
 export const fetchAdminUsers = async (params = {}) => {
     const { page = 1, size = 20, status, q } = params;

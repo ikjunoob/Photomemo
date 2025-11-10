@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3000
 app.use(cors({
     origin: process.env.FRONT_ORIGIN,              // 변경됨: .env 기반 오리진 설정
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 추가됨: 허용 메서드 명시
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], // 추가됨: 허용 메서드 명시
     allowedHeaders: ['Content-Type', 'Authorization'] // 추가됨: 허용 헤더 명시
 }));
 

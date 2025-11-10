@@ -1,28 +1,52 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { fetchAdminPosts, patchAdminPost } from "../../api/adminApi";
+import { fetchAdminPosts } from "../../api/adminApi";
 import AdminPostList from "../../components/admin/AdminPostsList";
-import AdminFilter from "../../components/admin/AdminFilter";
+import AdminPostFilter from "../../components/admin/AdminPostFilter";
+
+// 작성자 식별자 통일: 문자열/ObjectId/객체 모두 처리
+const getUserId = (u) => {
+    if (!u) return "";
+    if (typeof u === "string") return u.toLowerCase();
+    if (typeof u === "object") {
+        if (u._id) return String(u._id).toLowerCase();
+        if (u.id) return String(u.id).toLowerCase();
+    }
+    return String(u).toLowerCase();
+};
+
 const AdminPosts = () => {
-    const [list, setList] = useState([]);
-    const [query, setQuery] = useState({
-        page: 1,
-        size: 10,
-        status: "",
-        q: "",
-        user: "",
-    });
+    const [rawList, setRawList] = useState([]);
+    const [query, setQuery] = useState({ q: "", user: "", status: "" });
 
     useEffect(() => {
         (async () => {
-            const items = await fetchAdminPosts(query);
-            setList(items);
+            const items = await fetchAdminPosts(); // 서버 필터 X, 전체 받아오기
+            setRawList(Array.isArray(items) ? items : []);
         })();
-    }, [query]);
+    }, []);
+
+    const items = useMemo(() => {
+        const q = query.q.trim().toLowerCase();
+        const user = query.user.replace(/\s+/g, "").toLowerCase(); // 공백 제거
+        const status = query.status.trim().toLowerCase();
+
+        return rawList.filter((it) => {
+            const title = String(it.title ?? "").toLowerCase();
+            const uid = getUserId(it.user); // ← 핵심
+            const st = String(it.status ?? "").toLowerCase();
+
+            const matchTitle = q ? title.includes(q) : true;
+            const matchUser = user ? uid.includes(user) : true;
+            const matchStatus = status ? st === status : true;
+
+            return matchTitle && matchUser && matchStatus;
+        });
+    }, [rawList, query]);
 
     return (
-        <div>
-            <AdminFilter />
-            <AdminPostList items={list} />
+        <div className="inner">
+            <AdminPostFilter value={query} onChange={setQuery} />
+            <AdminPostList items={items} />
         </div>
     );
 };
