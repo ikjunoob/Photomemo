@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./style/AuthModal.scss"
-import api from '../api/client'
+import api, { BASE_URL } from '../api/client'
 const AuthModal = ({
     open,
     onClose,
@@ -24,6 +24,10 @@ const AuthModal = ({
     const [loading, setLoading] = useState(false)
     const [err, setErr] = useState('')
 
+
+    const handleKakaoLogin = () => {
+        window.location.href = `${BASE_URL}/api/auth/kakao`
+    }
 
     useEffect(() => {
 
@@ -191,6 +195,12 @@ const AuthModal = ({
                         disabled={loading || attemptInfo.locked}
                         className="btn primary">
                         {loading ? '처리중...' : (mode === 'register' ? '가입하기' : '로그인')}
+                    </button>
+
+                    <button type='button'
+                        onClick={handleKakaoLogin}
+                        className='btn'>
+                        카카오 로그인
                     </button>
                 </form>
 
