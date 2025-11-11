@@ -4,11 +4,11 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
-
+const passport = require('./config/passport')
 
 // authRoutes
-const authRoutes = require("./routes/authroutes")
-const uploadRoutes = require('./routes/upload')
+const authRoutes=require("./routes/authroutes")
+const uploadRoutes=require('./routes/upload')
 const postRoutes = require('./routes/posts')
 const adminRoutes = require('./routes/admin')
 
@@ -27,6 +27,7 @@ app.use(cors({
 
 app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser());
+app.use(passport.initialize())
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB 연결 성공"))

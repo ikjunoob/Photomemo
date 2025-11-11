@@ -16,7 +16,7 @@ const AdminPostsList = ({ items = [], onApprove, onReject }) => {
                     <li key={it._id}>
                         <span className="num">{i + 1}</span>
                         <span className="title">{it.title}</span>
-                        <span className="user">{it._id}</span>
+                        <span className="user">{it._userId}</span>
                         <span className="status">{it.status}</span>
                         <span className="date">
                             {it.updatedAt ? formatYMD(it.updatedAt) : "-"}
