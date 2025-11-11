@@ -11,6 +11,7 @@ import { PostProvider } from "./context/PostProvider";
 import AdminPosts from "./pages/admin/AdminPosts";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminLayout from "./components/admin/AdminLayout";
+import KakaoCallback from "./pages/KakaoCallback";
 import {
   fetchMe as apiFetchMe,
   logout as apiLogout,
@@ -33,6 +34,7 @@ function App() {
   const showHeader = isAuthed && !hideOn.has(location.pathname);
 
   const handleAuthed = async ({ user, token }) => {
+    console.log("카카오 로그인 완료:", user, token);
     try {
       setUser(user);
       setToken(token ?? null);
@@ -78,6 +80,11 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Landing />} />
+
+          <Route
+            path="/oauth/kakao"
+            element={<KakaoCallback onAuthed={handleAuthed} />} />
+
           {/* 로그인 회원가입 */}
           <Route
             path="/admin/login"
